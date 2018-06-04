@@ -1,5 +1,6 @@
 FROM debian:stretch-slim
 
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint
 #mirror
 ARG NPM_MIRROR_URL
 RUN apt-get update \
@@ -14,5 +15,7 @@ RUN apt-get update \
 		npm config set registry ${NPM_MIRROR_URL}; \
 	fi \
 	&& npm install gitbook-cli -g \
-	&& gitbook fetch
+	&& gitbook fetch \
+	&& chmod a+x /usr/local/bin/docker-entrypoint
+ENTRYPOINT ["docker-entrypoint"]
 CMD [ "gitbook", "ls" ]
